@@ -1,0 +1,57 @@
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    include-stacktrace: never
+    include-message: never
+    include-binding-errors: never
+    include-exception: false
+  servlet:
+    session:
+      timeout: 60m
+      cookie:
+        http-only: true
+        secure: true
+        same-site: strict
+
+spring:
+  application:
+    name: zai-air-quality-api
+  datasource:
+    url: jdbc:sqlite:${ZAI_DB_PATH:./data/airquality.db}
+    driver-class-name: org.sqlite.JDBC
+    hikari:
+      maximum-pool-size: 1
+      connection-init-sql: PRAGMA foreign_keys = ON
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.community.dialect.SQLiteDialect
+        format_sql: false
+  flyway:
+    enabled: true
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+
+zai:
+  admin:
+    username: ${ADMIN_USERNAME:admin}
+    password: ${ADMIN_PASSWORD:Admin123!}
+  token-ttl-seconds: 3600
+  seed: ${ZAI_SEED:true}
+
+logging:
+  level:
+    root: INFO
+    pl.zai: INFO
+    org.springframework.web: WARN
+    org.hibernate: WARN

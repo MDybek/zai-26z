@@ -1,0 +1,40 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: zai-air-quality-api
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      - SERVER_PORT=8080
+      - ZAI_DB_PATH=/app/data/airquality.db
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-Admin123!}
+      - ZAI_SEED=${ZAI_SEED:-true}
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1:8080/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  generator:
+    image: python:3.11-alpine
+    container_name: zai-sensor-generator
+    restart: "no"
+    profiles:
+      - tools
+    working_dir: /generator
+    volumes:
+      - ./generator:/generator:ro
+    environment:
+      - SENSOR_API_KEY=${SENSOR_API_KEY}
+    command: >
+      python3 sensor.py --api http://api:8080 --api-key ${SENSOR_API_KEY} --count 10 --interval 2
+    depends_on:
+      api:
+        condition: service_healthy
