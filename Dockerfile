@@ -5,22 +5,17 @@
 # ------------------------------------------
 # Stage 1: Build the application JAR
 # ------------------------------------------
-FROM eclipse-temurin:17-jdk-alpine AS builder
+FROM maven:3.9.9-eclipse-temurin-17-alpine AS builder
 
 WORKDIR /build
 
-# Copy Maven wrapper and POM first for layer caching
-COPY mvnw mvnw.cmd pom.xml ./
-COPY .mvn .mvn
+# Copy POM and go-offline for layer caching
+COPY pom.xml ./
+RUN mvn dependency:go-offline -B || true
 
-# Make wrapper executable
-RUN chmod +x ./mvnw
-
-# Copy source code
-COPY src src
-
-# Build package without running tests during image build
-RUN ./mvnw clean package -DskipTests
+# Copy source code and compile JAR
+COPY src ./src
+RUN mvn clean package -DskipTests
 
 # ------------------------------------------
 # Stage 2: Minimal, secure runtime container
