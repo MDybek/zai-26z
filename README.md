@@ -27,7 +27,7 @@ docker compose down
 ## Local Development (Without Docker)
 
 Requirements:
-- Java 17+ (e.g. OpenJDK 17)
+- Java 21+ (e.g. OpenJDK 21)
 - Node.js 20+ (for official automated test suite `docs/zai-tests.mjs`)
 - Python 3.9+ (for sensor emulator `generator/sensor.py`)
 
@@ -58,12 +58,22 @@ On first startup, the application:
 
 ---
 
-## IoT Sensor Emulator (F13 & Bonus)
+## IoT Sensor Emulator & Database Seeder (F11, F13 & Bonus)
 
-The emulator tool is located in `generator/sensor.py`. It sends measurements strictly through the API (`POST /api/measurements` with the `X-API-Key` header).
+The emulator tool is located in [generator/sensor.py](file:///Users/marceldybek/IdeaProjects/zai-26z/generator/sensor.py). It sends measurements strictly through the API (`POST /api/measurements` with the `X-API-Key` header).
 
-### 1. Register a Sensor in the Application
-Authenticate as administrator and register a sensor:
+### 1. Hands-Free Automated Seeding (Recommended for F11)
+To seed all 3 required series (PM2.5, PM10, NO2), auto-register sensors, and backfill 16 realistic measurements each through the API with **zero manual configuration**:
+
+```bash
+python3 generator/sensor.py
+# or explicitly:
+python3 generator/sensor.py --seed
+```
+*Note: If you run `python3 generator/sensor.py --api http://localhost:8080 --api-key "$SENSOR_API_KEY" --count 16 --mode sine` without exporting `SENSOR_API_KEY`, the script will automatically detect the missing key, log in with admin credentials, register sensors, and perform all the seeding automatically.*
+
+### 2. Manual Sensor Registration & Custom Injection
+If you prefer manual sensor management:
 ```bash
 # 1. Login
 TOKEN=$(curl -s -X POST http://localhost:8080/api/auth/login \
@@ -79,7 +89,7 @@ KEY=$(curl -s -X POST http://localhost:8080/api/sensors \
 echo "Sensor API Key: $KEY"
 ```
 
-### 2. Backfill Historical Data
+### 3. Backfill Historical Data for a Specific Sensor
 ```bash
 python3 generator/sensor.py \
   --api http://localhost:8080 \
@@ -91,7 +101,7 @@ python3 generator/sensor.py \
   --from 2026-10-01T00:00:00Z
 ```
 
-### 3. Continuous Live Streaming
+### 4. Continuous Live Streaming
 ```bash
 python3 generator/sensor.py \
   --api http://localhost:8080 \
@@ -102,7 +112,7 @@ python3 generator/sensor.py \
   --min 10 --max 60
 ```
 
-### 4. Real-world Data Fetching (Bonus Feature: +2 pts)
+### 5. Real-world Data Fetching (Bonus Feature: +2 pts)
 Fetch live measurements directly from the public Open-Meteo Air Quality API:
 ```bash
 python3 generator/sensor.py \
@@ -113,6 +123,25 @@ python3 generator/sensor.py \
   --latitude 52.23 \
   --longitude 21.01
 ```
+
+---
+
+## Direct Database Seeding via MySQL Init Script
+
+If you are using MySQL or want to pre-populate the database directly via SQL rather than through the API:
+A complete init script is available at [`init_sample_data_mysql.sql`](file:///Users/marceldybek/IdeaProjects/zai-26z/init_sample_data_mysql.sql) (also at `src/main/resources/db/init_sample_data_mysql.sql`).
+
+It pre-configures:
+- Administrator account (`admin` / `Admin123!`) with valid BCrypt hash
+- 3 series: `PM2.5` (0-150 µg/m³), `PM10` (0-250 µg/m³), `NO2` (0-200 µg/m³)
+- 3 sensors with pre-hashed keys (`sensor-pm25-key-1`, `sensor-pm10-key-2`, `sensor-no2-key-3`)
+- 16 historical measurements per series (48 total), satisfying requirement F11.
+
+To load it into MySQL:
+```bash
+mysql -u <username> -p <database_name> < init_sample_data_mysql.sql
+```
+*(Or place it inside `/docker-entrypoint-initdb.d/` if using MySQL in Docker).*
 
 ---
 
