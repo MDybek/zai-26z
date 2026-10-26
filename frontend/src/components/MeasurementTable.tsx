@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Measurement, Series } from '../types'
 
 interface MeasurementTableProps {
@@ -32,6 +32,14 @@ export const MeasurementTable: React.FC<MeasurementTableProps> = ({
         return sortAsc ? diff : -diff
       })
   }, [measurements, selectedSeriesIds, sortAsc])
+
+  useEffect(() => {
+    if (!selectedMeasurementId) return
+    const idx = filteredMeasurements.findIndex((m) => m.id === selectedMeasurementId)
+    if (idx !== -1) {
+      setCurrentPage(Math.floor(idx / pageSize) + 1)
+    }
+  }, [selectedMeasurementId, filteredMeasurements])
 
   const totalPages = Math.ceil(filteredMeasurements.length / pageSize) || 1
   const paginatedRows = useMemo(() => {

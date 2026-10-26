@@ -216,7 +216,7 @@ export const Chart: React.FC<ChartProps> = ({
           {timeTicks.map((t, idx) => (
             <g key={`x-grid-${idx}`}>
               <line x1={t.x} y1={30} x2={t.x} y2={315} stroke="#e2e8f0" strokeDasharray="3 3" />
-              <text x={t.x} y={335} fontSize="11" textAnchor="middle" fill="#64748b">
+              <text x={t.x} y={335} fontSize="11" textAnchor="middle" fill="#475569">
                 {t.label}
               </text>
             </g>
@@ -225,14 +225,14 @@ export const Chart: React.FC<ChartProps> = ({
           {valueTicks.map((v, idx) => (
             <g key={`y-grid-${idx}`}>
               <line x1={55} y1={v.y} x2={770} y2={v.y} stroke="#e2e8f0" strokeDasharray="3 3" />
-              <text x={48} y={v.y + 4} fontSize="11" textAnchor="end" fill="#64748b">
+              <text x={48} y={v.y + 4} fontSize="11" textAnchor="end" fill="#475569">
                 {v.label}
               </text>
             </g>
           ))}
 
-          <line x1={55} y1={315} x2={770} y2={315} stroke="#94a3b8" strokeWidth="1.5" />
-          <line x1={55} y1={30} x2={55} y2={315} stroke="#94a3b8" strokeWidth="1.5" />
+          <line x1={55} y1={315} x2={770} y2={315} stroke="#64748b" strokeWidth="1.5" />
+          <line x1={55} y1={30} x2={55} y2={315} stroke="#64748b" strokeWidth="1.5" />
 
           {Array.from(pointsBySeries.entries()).map(([seriesId, pts]) => {
             const s = pts[0]?.series
@@ -262,15 +262,35 @@ export const Chart: React.FC<ChartProps> = ({
                       style={{ cursor: 'pointer' }}
                     >
                       {isSelected && (
-                        <circle
-                          cx={pt.x}
-                          cy={pt.y}
-                          r={14}
-                          fill="none"
-                          stroke={s.color}
-                          strokeWidth="2"
-                          className="pulse-ring"
-                        />
+                        <g pointerEvents="none">
+                          <circle
+                            cx={pt.x}
+                            cy={pt.y}
+                            r={16}
+                            fill="none"
+                            stroke={s.color}
+                            strokeWidth="2.5"
+                            className="pulse-ring"
+                          />
+                          <rect
+                            x={pt.x - 36}
+                            y={Math.max(pt.y - 36, 6)}
+                            width={72}
+                            height={22}
+                            rx={4}
+                            fill={s.color}
+                          />
+                          <text
+                            x={pt.x}
+                            y={Math.max(pt.y - 21, 21)}
+                            textAnchor="middle"
+                            fill="#ffffff"
+                            fontSize="11"
+                            fontWeight="700"
+                          >
+                            {pt.measurement.value} {s.unit || ''}
+                          </text>
+                        </g>
                       )}
                       {renderMarker(idx, pt.x, pt.y, s.color, isSelected)}
                     </g>

@@ -602,6 +602,10 @@
   margin-top: 0.75rem;
 }
 
+.print-summary {
+  display: none;
+}
+
 .spin {
   animation: spin 1s linear infinite;
 }
@@ -617,14 +621,29 @@
     color: #000000;
   }
 
+  .print-summary {
+    display: block !important;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 0.5rem;
+  }
+
   .app-container {
     max-width: 100%;
     padding: 0;
     margin: 0;
-    gap: 1rem;
+    gap: 1.5rem;
   }
 
-  .no-print {
+  .no-print,
+  button,
+  input,
+  select,
+  .modal-backdrop,
+  .table-pagination,
+  .tab-buttons,
+  .admin-panel,
+  .pulse-ring {
     display: none !important;
   }
 
@@ -632,10 +651,15 @@
     border: none;
     box-shadow: none;
     padding: 0;
+    break-inside: avoid;
   }
 
   .data-table th, .data-table td {
     border-color: #cbd5e1;
+  }
+
+  .chart-svg-container {
+    max-height: 380px;
   }
 }
 

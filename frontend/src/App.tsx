@@ -204,6 +204,11 @@ export function App() {
           </div>
         )}
 
+        <div className="print-summary" aria-hidden="true">
+          <h2>Raport Jakości Powietrza</h2>
+          <p>Wygenerowano: {new Date().toLocaleString('pl-PL')}</p>
+        </div>
+
         <FilterBar
           seriesList={seriesList}
           selectedSeriesIds={selectedSeriesIds}

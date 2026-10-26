@@ -76,13 +76,13 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                   onClick={() => onToggleSeries(s.id)}
                   className={`pill-btn ${active ? 'active' : ''}`}
                   style={{
-                    borderColor: s.color,
-                    backgroundColor: active ? s.color : 'transparent',
-                    color: active ? '#ffffff' : s.color,
+                    borderColor: active ? s.color : '#cbd5e1',
+                    backgroundColor: active ? `${s.color}20` : 'transparent',
+                    color: '#0f172a',
                   }}
                   aria-pressed={active}
                 >
-                  <span className="series-shape" aria-hidden="true">{shape}</span>
+                  <span className="series-shape" style={{ color: s.color }} aria-hidden="true">{shape}</span>
                   <span>{s.name}</span>
                   {s.unit && <small className="unit-tag">({s.unit})</small>}
                 </button>
