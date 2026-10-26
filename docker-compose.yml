@@ -16,7 +16,7 @@ services:
     volumes:
       - ./data:/app/data
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1:8080/api/health"]
+      test: ["CMD-SHELL", "curl -f -s http://127.0.0.1:8080/api/health || wget --quiet --tries=1 --spider http://127.0.0.1:8080/api/health || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
