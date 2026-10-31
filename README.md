@@ -14,7 +14,7 @@ zai-26z/
 ├── sensor.py             # Emulator czujnika i generator danych (F11, F13 + Open-Meteo)
 ├── zai-tests.mjs         # Oficjalny zestaw testów automatycznych prowadzącego (E1/E2)
 ├── docker-compose.yml    # Orkiestracja kontenerów (Backend + Frontend + PostgreSQL + MongoDB + Generator)
-├── backend/              # REST API w Spring Boot 4.1.1 (Java 17, PostgreSQL, MongoDB, Flyway, Lombok)
+├── backend/              # REST API w Spring Boot 4.1.1 (Java 25, PostgreSQL, MongoDB, Flyway, Lombok)
 ├── frontend/             # SPA w React 18 + TypeScript + Vite (wykres SVG, WCAG AA, druk)
 ├── docs/                 # Kontrakt OpenAPI (zai-api-26z.yaml)
 └── task/                 # Oficjalna specyfikacja zadania (ZAI projekt 26Z.pdf)
@@ -46,7 +46,7 @@ docker compose down
 ## Uruchomienie Lokalne (Bez Dockera)
 
 ### Wymagania
-- Java 17+ (Eclipse Temurin / OpenJDK)
+- Java 25 (lub 17+ z profilem jdk-legacy) (Eclipse Temurin / OpenJDK)
 - Node.js 20+ i npm 10+
 - Python 3.9+
 

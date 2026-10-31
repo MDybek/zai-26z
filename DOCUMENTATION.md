@@ -2,7 +2,7 @@
 
 **Autor:** Marcel Dybek  
 **Temat projektu:** System zbierania i wizualizacji serii pomiarowych jakości powietrza (PM2.5, PM10, NO2)  
-**Technologie:** Java 17 (Spring Boot 4.1.1, Hibernate/JPA, PostgreSQL, MongoDB Time Series), React 18 (TypeScript, Vite), Docker  
+**Technologie:** Java 25 (Spring Boot 4.1.1, Hibernate/JPA, PostgreSQL, MongoDB Time Series), React 18 (TypeScript, Vite), Docker  
 
 ---
 
