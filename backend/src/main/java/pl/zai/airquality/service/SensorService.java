@@ -82,7 +82,7 @@ public class SensorService {
     }
 
     private SensorResponse toResponse(Sensor sensor) {
-        Instant last = measurementRepository.findTopBySensor_IdOrderByTimestampDesc(sensor.getId())
+        Instant last = measurementRepository.findTopBySensorIdOrderByTimestampDesc(sensor.getId())
                 .map(Measurement::getTimestamp)
                 .orElse(null);
         return new SensorResponse(

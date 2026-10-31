@@ -1,4 +1,37 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: zai-postgres
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: ${DB_NAME:-airquality}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/src/main/resources/db/init_sample_data_postgres.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d airquality"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mongo:
+    image: mongo:7-jammy
+    container_name: zai-mongo
+    restart: unless-stopped
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --eval 'db.runCommand({ ping: 1 }).ok' --quiet || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   api:
     build:
       context: ./backend
@@ -9,12 +42,18 @@ services:
       - "${PORT:-8080}:8080"
     environment:
       - SERVER_PORT=8080
-      - ZAI_DB_PATH=/app/data/airquality.db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/airquality
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/airquality
       - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-Admin123!}
       - ZAI_SEED=${ZAI_SEED:-true}
-    volumes:
-      - ./data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -f -s http://127.0.0.1:8080/api/health || wget --quiet --tries=1 --spider http://127.0.0.1:8080/api/health || exit 1"]
       interval: 10s
@@ -50,3 +89,7 @@ services:
     depends_on:
       api:
         condition: service_healthy
+
+volumes:
+  postgres_data:
+  mongo_data:

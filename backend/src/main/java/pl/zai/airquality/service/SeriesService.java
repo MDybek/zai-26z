@@ -55,7 +55,7 @@ public class SeriesService {
     @Transactional
     public void delete(Long id) {
         Series series = require(id);
-        measurementRepository.deleteBySeries_Id(id);
+        measurementRepository.deleteBySeriesId(id);
         sensorRepository.deleteBySeries_Id(id);
         seriesRepository.delete(series);
     }

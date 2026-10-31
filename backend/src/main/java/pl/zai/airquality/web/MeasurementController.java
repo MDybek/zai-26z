@@ -53,7 +53,7 @@ public class MeasurementController {
     }
 
     @GetMapping(value = "/{measurementId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public MeasurementResponse get(@PathVariable Long measurementId) {
+    public MeasurementResponse get(@PathVariable String measurementId) {
         return measurementService.get(measurementId);
     }
 

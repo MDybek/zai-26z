@@ -5,8 +5,8 @@ interface MeasurementTableProps {
   seriesList: Series[]
   measurements: Measurement[]
   selectedSeriesIds: number[]
-  selectedMeasurementId: number | null
-  onSelectMeasurement: (id: number) => void
+  selectedMeasurementId: number | string | null
+  onSelectMeasurement: (id: number | string) => void
 }
 
 export const MeasurementTable: React.FC<MeasurementTableProps> = ({

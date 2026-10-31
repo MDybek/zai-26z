@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import pl.zai.airquality.domain.Measurement;
 import pl.zai.airquality.domain.Sensor;
 import pl.zai.airquality.domain.Series;
@@ -47,24 +46,21 @@ public class MeasurementService {
         return saveMeasurement(series, sensor, value, timestamp);
     }
 
-    @Transactional
     public MeasurementResponse saveMeasurement(Series series, Sensor sensor, double value, Instant timestamp) {
         Measurement measurement = new Measurement();
-        measurement.setSeries(series);
-        measurement.setSensor(sensor);
+        measurement.setSeriesId(series.getId());
+        measurement.setSensorId(sensor != null ? sensor.getId() : null);
         measurement.setValue(value);
         measurement.setTimestamp(timestamp);
         return MeasurementResponse.from(measurementRepository.save(measurement));
     }
 
-    @Transactional(readOnly = true)
-    public MeasurementResponse get(Long id) {
+    public MeasurementResponse get(String id) {
         Measurement measurement = measurementRepository.findById(id)
                 .orElseThrow(() -> ApiException.notFound("Measurement not found"));
         return MeasurementResponse.from(measurement);
     }
 
-    @Transactional(readOnly = true)
     public List<MeasurementResponse> list(String seriesParam, Instant from, Instant to, String sort, Integer limit) {
         if (from != null && to != null && from.isAfter(to)) {
             throw ApiException.badRequest("from must be less than or equal to to");

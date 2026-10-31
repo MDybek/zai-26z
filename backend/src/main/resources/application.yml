@@ -12,18 +12,23 @@ spring:
   application:
     name: zai-air-quality-api
   datasource:
-    url: jdbc:sqlite:${ZAI_DB_PATH:./data/airquality.db}
-    driver-class-name: org.sqlite.JDBC
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:airquality}}
+    username: ${SPRING_DATASOURCE_USERNAME:${DB_USER:postgres}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${DB_PASSWORD:postgres}}
+    driver-class-name: org.postgresql.Driver
     hikari:
-      maximum-pool-size: 1
-      connection-init-sql: PRAGMA foreign_keys = ON
+      maximum-pool-size: 10
+      minimum-idle: 2
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://${MONGO_HOST:localhost}:${MONGO_PORT:27017}/${MONGO_DATABASE:airquality}}
   jpa:
     open-in-view: false
     hibernate:
       ddl-auto: none
     properties:
       hibernate:
-        dialect: org.hibernate.community.dialect.SQLiteDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: false
   flyway:
     enabled: true
@@ -46,6 +51,8 @@ zai:
     password: ${ADMIN_PASSWORD:Admin123!}
   token-ttl-seconds: 3600
   seed: ${ZAI_SEED:true}
+  timeseries:
+    storage: ${ZAI_TIMESERIES_STORAGE:mongo}
 
 logging:
   level:

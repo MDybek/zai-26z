@@ -1,39 +1,32 @@
 package pl.zai.airquality.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import java.time.Instant;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.TimeSeries;
 
-@Entity
-@Table(name = "measurements")
+@Document(collection = "measurements")
+@TimeSeries(timeField = "timestamp", metaField = "seriesId")
+@CompoundIndex(name = "series_time_idx", def = "{'seriesId': 1, 'timestamp': -1}")
 @Getter
 @Setter
 public class Measurement {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "series_id", nullable = false)
-    private Series series;
+    @Indexed
+    private Long seriesId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "sensor_id")
-    private Sensor sensor;
+    @Indexed
+    private Long sensorId;
 
-    @Column(nullable = false)
     private double value;
 
-    @Column(nullable = false)
+    @Indexed
     private Instant timestamp;
 }

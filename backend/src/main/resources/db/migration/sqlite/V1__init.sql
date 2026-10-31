@@ -1,10 +1,10 @@
-CREATE TABLE admin_users (
+CREATE TABLE IF NOT EXISTS admin_users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL
 );
 
-CREATE TABLE access_tokens (
+CREATE TABLE IF NOT EXISTS access_tokens (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER NOT NULL,
     token_hash TEXT NOT NULL UNIQUE,
@@ -13,7 +13,7 @@ CREATE TABLE access_tokens (
     FOREIGN KEY (user_id) REFERENCES admin_users (id) ON DELETE CASCADE
 );
 
-CREATE TABLE series (
+CREATE TABLE IF NOT EXISTS series (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     min_value REAL NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE series (
     unit TEXT
 );
 
-CREATE TABLE sensors (
+CREATE TABLE IF NOT EXISTS sensors (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     series_id INTEGER NOT NULL,
@@ -32,23 +32,11 @@ CREATE TABLE sensors (
     FOREIGN KEY (series_id) REFERENCES series (id) ON DELETE CASCADE
 );
 
-CREATE TABLE measurements (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    series_id INTEGER NOT NULL,
-    sensor_id INTEGER,
-    value REAL NOT NULL,
-    timestamp TEXT NOT NULL,
-    FOREIGN KEY (series_id) REFERENCES series (id) ON DELETE CASCADE,
-    FOREIGN KEY (sensor_id) REFERENCES sensors (id) ON DELETE SET NULL
-);
-
-CREATE INDEX idx_measurements_series_timestamp ON measurements (series_id, timestamp);
-CREATE INDEX idx_measurements_timestamp ON measurements (timestamp);
-CREATE INDEX idx_sensors_series ON sensors (series_id);
-CREATE INDEX idx_access_tokens_hash ON access_tokens (token_hash);
-
-CREATE TABLE error_log (
+CREATE TABLE IF NOT EXISTS error_log (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     created_at TEXT NOT NULL,
     message TEXT NOT NULL
 );
+
+CREATE INDEX IF NOT EXISTS idx_sensors_series ON sensors (series_id);
+CREATE INDEX IF NOT EXISTS idx_access_tokens_hash ON access_tokens (token_hash);

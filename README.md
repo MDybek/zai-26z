@@ -13,8 +13,8 @@ zai-26z/
 ├── test.sh               # Skrypt uruchamiający testy backendu, frontendu i kontraktowe
 ├── sensor.py             # Emulator czujnika i generator danych (F11, F13 + Open-Meteo)
 ├── zai-tests.mjs         # Oficjalny zestaw testów automatycznych prowadzącego (E1/E2)
-├── docker-compose.yml    # Orkiestracja kontenerów (Backend + Frontend + Generator)
-├── backend/              # REST API w Spring Boot 3.3.5 (Java 17, SQLite/MySQL, Flyway)
+├── docker-compose.yml    # Orkiestracja kontenerów (Backend + Frontend + PostgreSQL + MongoDB + Generator)
+├── backend/              # REST API w Spring Boot 4.1.1 (Java 17, PostgreSQL, MongoDB, Flyway, Lombok)
 ├── frontend/             # SPA w React 18 + TypeScript + Vite (wykres SVG, WCAG AA, druk)
 ├── docs/                 # Kontrakt OpenAPI (zai-api-26z.yaml)
 └── task/                 # Oficjalna specyfikacja zadania (ZAI projekt 26Z.pdf)
@@ -32,8 +32,9 @@ docker compose up --build
 
 - **Frontend (Aplikacja):** `http://localhost:3000`
 - **Backend (API):** `http://localhost:8080` (Healthcheck: `http://localhost:8080/api/health`)
+- **Baza PostgreSQL (Relacje):** port `5432` (`airquality`)
+- **Baza MongoDB (Serie czasowe):** port `27017` (`airquality`)
 - **Domyślny administrator:** `admin` / `Admin123!`
-- Dane SQLite są trwale zapisywane na hoście w `./data/airquality.db`.
 
 Zatrzymanie:
 ```bash

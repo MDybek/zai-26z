@@ -18,7 +18,7 @@ export interface SeriesInput {
 }
 
 export interface Measurement {
-  id: number
+  id: number | string
   seriesId: number
   sensorId?: number | null
   value: number

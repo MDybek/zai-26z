@@ -16,7 +16,7 @@ export function App() {
   const [selectedSeriesIds, setSelectedSeriesIds] = useState<number[]>([])
   const [measurements, setMeasurements] = useState<Measurement[]>([])
   const [sensorsList, setSensorsList] = useState<Sensor[]>([])
-  const [selectedMeasurementId, setSelectedMeasurementId] = useState<number | null>(null)
+  const [selectedMeasurementId, setSelectedMeasurementId] = useState<number | string | null>(null)
 
   const [fromDate, setFromDate] = useState<string>('')
   const [toDate, setToDate] = useState<string>('')

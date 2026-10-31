@@ -174,7 +174,7 @@ class AirQualityApplicationTests {
                 .andReturn();
 
         JsonNode measJson = objectMapper.readTree(measRes.getResponse().getContentAsString());
-        long measId = measJson.get("id").asLong();
+        String measId = measJson.get("id").asText();
         assertThat(measJson.get("value").asDouble()).isEqualTo(21.5);
         assertThat(measJson.get("seriesId").asLong()).isEqualTo(seriesId);
 
