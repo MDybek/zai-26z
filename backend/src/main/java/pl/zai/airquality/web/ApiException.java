@@ -1,8 +1,10 @@
 package pl.zai.airquality.web;
 
 import java.util.List;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public class ApiException extends RuntimeException {
 
     private final HttpStatus status;
@@ -18,18 +20,6 @@ public class ApiException extends RuntimeException {
         this.status = status;
         this.title = title;
         this.errors = errors;
-    }
-
-    public HttpStatus getStatus() {
-        return status;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public List<ProblemBody.FieldError> getErrors() {
-        return errors;
     }
 
     public static ApiException badRequest(String detail) {
@@ -53,11 +43,11 @@ public class ApiException extends RuntimeException {
     }
 
     public static ApiException unprocessable(String detail) {
-        return new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "Unprocessable Entity", detail);
+        return new ApiException(HttpStatus.UNPROCESSABLE_CONTENT, "Unprocessable Entity", detail);
     }
 
     public static ApiException unprocessable(String detail, List<ProblemBody.FieldError> errors) {
-        return new ApiException(HttpStatus.UNPROCESSABLE_ENTITY, "Unprocessable Entity", detail, errors);
+        return new ApiException(HttpStatus.UNPROCESSABLE_CONTENT, "Unprocessable Entity", detail, errors);
     }
 
     public static ApiException unsupportedMediaType() {

@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import pl.zai.airquality.web.dto.MeasurementInput;
 import pl.zai.airquality.web.dto.MeasurementResponse;
 
 @Service
+@RequiredArgsConstructor
 public class MeasurementService {
 
     private static final Duration FUTURE_TOLERANCE = Duration.ofMinutes(5);
@@ -25,16 +27,6 @@ public class MeasurementService {
     private final MeasurementRepository measurementRepository;
     private final SensorService sensorService;
     private final ErrorLogService errorLogService;
-
-    public MeasurementService(
-            MeasurementRepository measurementRepository,
-            SensorService sensorService,
-            ErrorLogService errorLogService
-    ) {
-        this.measurementRepository = measurementRepository;
-        this.sensorService = sensorService;
-        this.errorLogService = errorLogService;
-    }
 
     public MeasurementResponse create(String apiKey, MeasurementInput input) {
         Sensor sensor = sensorService.requireByApiKey(apiKey);

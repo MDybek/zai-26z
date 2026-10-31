@@ -3,8 +3,8 @@ package pl.zai.airquality.config;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -23,23 +23,13 @@ import pl.zai.airquality.web.dto.SeriesResponse;
 @Component
 @Order(2)
 @ConditionalOnProperty(name = "zai.seed", havingValue = "true", matchIfMissing = true)
+@RequiredArgsConstructor
+@Slf4j
 public class SampleDataSeeder implements ApplicationRunner {
-
-    private static final Logger log = LoggerFactory.getLogger(SampleDataSeeder.class);
 
     private final SeriesService seriesService;
     private final SensorService sensorService;
     private final MeasurementService measurementService;
-
-    public SampleDataSeeder(
-            SeriesService seriesService,
-            SensorService sensorService,
-            MeasurementService measurementService
-    ) {
-        this.seriesService = seriesService;
-        this.sensorService = sensorService;
-        this.measurementService = measurementService;
-    }
 
     @Override
     public void run(ApplicationArguments args) {

@@ -2,6 +2,7 @@ package pl.zai.airquality.web;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +21,10 @@ import pl.zai.airquality.web.dto.SeriesResponse;
 
 @RestController
 @RequestMapping("/api/series")
+@RequiredArgsConstructor
 public class SeriesController {
 
     private final SeriesService seriesService;
-
-    public SeriesController(SeriesService seriesService) {
-        this.seriesService = seriesService;
-    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<SeriesResponse> list() {

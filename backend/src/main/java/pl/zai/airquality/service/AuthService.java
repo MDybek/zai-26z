@@ -2,6 +2,7 @@ package pl.zai.airquality.service;
 
 import java.time.Instant;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,24 +19,15 @@ import pl.zai.airquality.web.dto.LoginResponse;
 import pl.zai.airquality.web.dto.PasswordChange;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     private final AdminUserRepository adminUserRepository;
     private final AccessTokenRepository accessTokenRepository;
     private final PasswordEncoder passwordEncoder;
-    private final int tokenTtlSeconds;
 
-    public AuthService(
-            AdminUserRepository adminUserRepository,
-            AccessTokenRepository accessTokenRepository,
-            PasswordEncoder passwordEncoder,
-            @Value("${zai.token-ttl-seconds:3600}") int tokenTtlSeconds
-    ) {
-        this.adminUserRepository = adminUserRepository;
-        this.accessTokenRepository = accessTokenRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.tokenTtlSeconds = tokenTtlSeconds;
-    }
+    @Value("${zai.token-ttl-seconds:3600}")
+    private int tokenTtlSeconds;
 
     @Transactional
     public LoginResponse login(LoginRequest request) {

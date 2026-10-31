@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,13 +16,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import pl.zai.airquality.service.AuthService;
 
 @Component
+@RequiredArgsConstructor
 public class BearerAuthenticationFilter extends OncePerRequestFilter {
 
     private final AuthService authService;
-
-    public BearerAuthenticationFilter(AuthService authService) {
-        this.authService = authService;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

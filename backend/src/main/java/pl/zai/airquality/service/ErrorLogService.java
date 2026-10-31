@@ -1,24 +1,19 @@
 package pl.zai.airquality.service;
 
 import java.time.Instant;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.zai.airquality.domain.ErrorLogEntry;
 import pl.zai.airquality.repo.ErrorLogRepository;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class ErrorLogService {
 
-    private static final Logger log = LoggerFactory.getLogger(ErrorLogService.class);
-
     private final ErrorLogRepository errorLogRepository;
-
-    public ErrorLogService(ErrorLogRepository errorLogRepository) {
-        this.errorLogRepository = errorLogRepository;
-    }
 
     @Transactional
     public void record(String message) {

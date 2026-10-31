@@ -17,17 +17,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.zai.airquality.service.MeasurementService;
 import pl.zai.airquality.web.dto.MeasurementInput;
+import lombok.RequiredArgsConstructor;
 import pl.zai.airquality.web.dto.MeasurementResponse;
 
 @RestController
 @RequestMapping("/api/measurements")
+@RequiredArgsConstructor
 public class MeasurementController {
 
     private final MeasurementService measurementService;
-
-    public MeasurementController(MeasurementService measurementService) {
-        this.measurementService = measurementService;
-    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MeasurementResponse> list(

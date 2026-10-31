@@ -1,11 +1,12 @@
 package pl.zai.airquality.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -28,18 +29,14 @@ import pl.zai.airquality.web.ProblemBody;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final BearerAuthenticationFilter bearerAuthenticationFilter;
     private final ObjectMapper objectMapper;
 
-    public SecurityConfig(BearerAuthenticationFilter bearerAuthenticationFilter, ObjectMapper objectMapper) {
-        this.bearerAuthenticationFilter = bearerAuthenticationFilter;
-        this.objectMapper = objectMapper;
-    }
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         AuthenticationEntryPoint entryPoint = (request, response, authException) -> writeUnauthorized(response);
         http
                 .csrf(AbstractHttpConfigurer::disable)

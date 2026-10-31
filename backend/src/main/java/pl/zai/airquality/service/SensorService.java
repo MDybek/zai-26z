@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.zai.airquality.domain.Measurement;
 import pl.zai.airquality.domain.Sensor;
 import pl.zai.airquality.domain.Series;
 import pl.zai.airquality.repo.MeasurementRepository;
@@ -12,24 +13,16 @@ import pl.zai.airquality.security.Hashing;
 import pl.zai.airquality.web.ApiException;
 import pl.zai.airquality.web.dto.SensorCreatedResponse;
 import pl.zai.airquality.web.dto.SensorInput;
+import lombok.RequiredArgsConstructor;
 import pl.zai.airquality.web.dto.SensorResponse;
 
 @Service
+@RequiredArgsConstructor
 public class SensorService {
 
     private final SensorRepository sensorRepository;
     private final SeriesService seriesService;
     private final MeasurementRepository measurementRepository;
-
-    public SensorService(
-            SensorRepository sensorRepository,
-            SeriesService seriesService,
-            MeasurementRepository measurementRepository
-    ) {
-        this.sensorRepository = sensorRepository;
-        this.seriesService = seriesService;
-        this.measurementRepository = measurementRepository;
-    }
 
     @Transactional(readOnly = true)
     public List<SensorResponse> list() {
@@ -90,7 +83,7 @@ public class SensorService {
 
     private SensorResponse toResponse(Sensor sensor) {
         Instant last = measurementRepository.findTopBySensor_IdOrderByTimestampDesc(sensor.getId())
-                .map(m -> m.getTimestamp())
+                .map(Measurement::getTimestamp)
                 .orElse(null);
         return new SensorResponse(
                 sensor.getId(),

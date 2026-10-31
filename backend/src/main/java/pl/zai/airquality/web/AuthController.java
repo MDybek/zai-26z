@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
 import pl.zai.airquality.security.AdminPrincipal;
 import pl.zai.airquality.service.AuthService;
 import pl.zai.airquality.web.dto.LoginRequest;
@@ -21,13 +22,10 @@ import pl.zai.airquality.web.dto.PasswordChange;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
-
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(

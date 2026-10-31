@@ -1,10 +1,5 @@
 server:
   port: ${SERVER_PORT:8080}
-  error:
-    include-stacktrace: never
-    include-message: never
-    include-binding-errors: never
-    include-exception: false
   servlet:
     session:
       timeout: 60m
@@ -33,14 +28,17 @@ spring:
   flyway:
     enabled: true
   jackson:
-    serialization:
-      write-dates-as-timestamps: false
     default-property-inclusion: non_null
   mvc:
     throw-exception-if-no-handler-found: true
   web:
     resources:
       add-mappings: false
+    error:
+      include-stacktrace: never
+      include-message: never
+      include-binding-errors: never
+      include-exception: false
 
 zai:
   admin:

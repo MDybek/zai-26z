@@ -9,25 +9,17 @@ import pl.zai.airquality.repo.SensorRepository;
 import pl.zai.airquality.repo.SeriesRepository;
 import pl.zai.airquality.web.ApiException;
 import pl.zai.airquality.web.ProblemBody;
+import lombok.RequiredArgsConstructor;
 import pl.zai.airquality.web.dto.SeriesInput;
 import pl.zai.airquality.web.dto.SeriesResponse;
 
 @Service
+@RequiredArgsConstructor
 public class SeriesService {
 
     private final SeriesRepository seriesRepository;
     private final MeasurementRepository measurementRepository;
     private final SensorRepository sensorRepository;
-
-    public SeriesService(
-            SeriesRepository seriesRepository,
-            MeasurementRepository measurementRepository,
-            SensorRepository sensorRepository
-    ) {
-        this.seriesRepository = seriesRepository;
-        this.measurementRepository = measurementRepository;
-        this.sensorRepository = sensorRepository;
-    }
 
     @Transactional(readOnly = true)
     public List<SeriesResponse> list() {

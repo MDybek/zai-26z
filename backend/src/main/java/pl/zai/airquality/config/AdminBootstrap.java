@@ -1,7 +1,7 @@
 package pl.zai.airquality.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -13,26 +13,18 @@ import pl.zai.airquality.repo.AdminUserRepository;
 
 @Component
 @Order(1)
+@RequiredArgsConstructor
+@Slf4j
 public class AdminBootstrap implements ApplicationRunner {
-
-    private static final Logger log = LoggerFactory.getLogger(AdminBootstrap.class);
 
     private final AdminUserRepository adminUserRepository;
     private final PasswordEncoder passwordEncoder;
-    private final String username;
-    private final String password;
 
-    public AdminBootstrap(
-            AdminUserRepository adminUserRepository,
-            PasswordEncoder passwordEncoder,
-            @Value("${zai.admin.username}") String username,
-            @Value("${zai.admin.password}") String password
-    ) {
-        this.adminUserRepository = adminUserRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.username = username;
-        this.password = password;
-    }
+    @Value("${zai.admin.username}")
+    private String username;
+
+    @Value("${zai.admin.password}")
+    private String password;
 
     @Override
     public void run(ApplicationArguments args) {
