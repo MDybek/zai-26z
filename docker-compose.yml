@@ -1,7 +1,7 @@
 services:
   api:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     container_name: zai-air-quality-api
     restart: unless-stopped
@@ -40,9 +40,9 @@ services:
     restart: "no"
     profiles:
       - tools
-    working_dir: /generator
+    working_dir: /app
     volumes:
-      - ./generator:/generator:ro
+      - ./sensor.py:/app/sensor.py:ro
     environment:
       - SENSOR_API_KEY=${SENSOR_API_KEY}
     command: >

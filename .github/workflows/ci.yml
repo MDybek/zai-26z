@@ -20,6 +20,7 @@ jobs:
           cache: 'maven'
 
       - name: Run Maven Tests
+        working-directory: backend
         run: |
           chmod +x mvnw
           ./mvnw -B test
